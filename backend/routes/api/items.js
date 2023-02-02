@@ -174,15 +174,16 @@ router.get("/:item", auth.optional, function (req, res, next) {
 
 // return items containing the title as title in item description
 router.get("/item/:title", auth.optional, async (req, res, next) => {
-  try {
-    let title = req.params.title;
-    let res = await Item.find({ title: title })
-      .populate("seller")
-      .execPopulate();
-    return res;
-  } catch (err) {
-    next(err);
-  }
+  Promise.all([
+    req.payload ? User.find({title:title}) : null,
+    req.item.populate("seller").execPopulate(),
+  ])
+    .then(function (results) {
+      var user = results[0];
+
+      return res.json({ item: req.item.toJSONFor(user) });
+    })
+    .catch(next);
 });
 
 // update item
