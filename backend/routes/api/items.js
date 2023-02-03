@@ -40,6 +40,7 @@ router.get("/", auth.optional, function (req, res, next) {
   var query = {};
   var limit = 100;
   var offset = 0;
+  // let queryTitle = '';
 
   if (typeof req.query.limit !== "undefined") {
     limit = req.query.limit;
@@ -53,11 +54,16 @@ router.get("/", auth.optional, function (req, res, next) {
     query.tagList = { $in: [req.query.tag] };
   }
 
+  // if(req.query.title != ''){
+  //   queryTitle = req.query.title;
+  // }
+
   Promise.all([
     req.query.seller ? User.findOne({ username: req.query.seller }) : null,
     req.query.favorited
       ? User.findOne({ username: req.query.favorited })
       : null,
+    req.query.title ? User.findOne({ title: req.query.title }) : null,
   ])
     .then(function (results) {
       var seller = results[0];
@@ -173,18 +179,18 @@ router.get("/:item", auth.optional, function (req, res, next) {
 });
 
 // return items containing the title as title in item description
-router.get("/item/:title", auth.optional, async (req, res, next) => {
-  Promise.all([
-    req.payload ? User.find({title:title}) : null,
-    req.item.populate("seller").execPopulate(),
-  ])
-    .then(function (results) {
-      var user = results[0];
+// router.get("/item/:title", auth.optional, async (req, res, next) => {
+//   Promise.all([
+//     req.payload ? User.find({title:title}) : null,
+//     req.item.populate("seller").execPopulate(),
+//   ])
+//     .then(function (results) {
+//       var user = results[0];
 
-      return res.json({ item: req.item.toJSONFor(user) });
-    })
-    .catch(next);
-});
+//       return res.json({ item: req.item.toJSONFor(user) });
+//     })
+//     .catch(next);
+// });
 
 // update item
 router.put("/:item", auth.required, function (req, res, next) {
