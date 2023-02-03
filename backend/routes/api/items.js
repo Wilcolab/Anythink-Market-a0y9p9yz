@@ -55,7 +55,8 @@ router.get("/", auth.optional, function (req, res, next) {
   }
 
   if (req.query.title !== "undefined") {
-    query.title = { $filter: [req.query.title] };
+    let regex = new RegExp(req.query.title, 'i'); // adding regex for partial & full match, i for case-insensitive
+    query.title = { $regex: regex };
   }
 
   Promise.all([
