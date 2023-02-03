@@ -55,21 +55,13 @@ router.get("/", auth.optional, function (req, res, next) {
   }
 
   if (req.query.title !== "undefined") {
-    query.title = { $in: [req.query.title] };
+    query.titleList = { $in: [req.query.title] };
   }
 
   Promise.all([
-    req.query.seller
-      ? User.findOne(
-          { username: req.query.seller },
-          { $filter: { title: req.query.title } }
-        )
-      : null,
+    req.query.seller ? User.findOne({ username: req.query.seller }) : null,
     req.query.favorited
-      ? User.findOne(
-          { username: req.query.favorited },
-          { $filter: { title: req.query.title } }
-        )
+      ? User.findOne({ username: req.query.favorited })
       : null,
     // req.query.title ? User.findOne({ title: req.query.title }) : null,
   ])
