@@ -40,7 +40,7 @@ router.get("/", auth.optional, function (req, res, next) {
   var query = {};
   var limit = 100;
   var offset = 0;
-  // let queryTitle = '';
+  let queryTitle = "";
 
   if (typeof req.query.limit !== "undefined") {
     limit = req.query.limit;
@@ -54,9 +54,9 @@ router.get("/", auth.optional, function (req, res, next) {
     query.tagList = { $in: [req.query.tag] };
   }
 
-  // if(req.query.title != ''){
-  //   queryTitle = req.query.title;
-  // }
+  if (req.query.title !== "undefined") {
+    query.title = { $in: [req.query.title] };
+  }
 
   Promise.all([
     req.query.seller
