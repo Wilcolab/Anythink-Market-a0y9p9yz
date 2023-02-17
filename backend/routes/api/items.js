@@ -153,28 +153,41 @@ router.get("/feed", auth.required, function (req, res, next) {
   });
 });
 
-router.post("/", auth.required, async (req, res, next) => {
+router.post("/", auth.required, function (req, res, next) {
   User.findById(req.payload.id)
-    .then(async (user) => {
+    .then( function(user) {
       if (!user) {
         return res.sendStatus(401);
       }
 
       var item = new Item(req.body.item);
  
+      // if(!item?.image){
+      //   try{
+      //     const response = openAI.createImage({
+      //       prompt: item?.title,
+      //       n: 1,
+      //       size: "256x256",
+      //     });
+      //     item.image = response.data.data[0].url;
+      //   }catch(err){
+      //     console.log(err);
+      //   }
+      // }
       if(!item?.image){
         try{
-          const response = await openAI.createImage({
+          openAI.createImage({
             prompt: item?.title,
             n: 1,
             size: "256x256",
+          }).then((res)=>{
+            item.image = res.data.data[0].url;
           });
-          item.image = response.data.data[0].url;
         }catch(err){
           console.log(err);
         }
       }
-
+      
       item.seller = user;
 
       return item.save().then(function () {
