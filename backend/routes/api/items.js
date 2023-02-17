@@ -155,7 +155,7 @@ router.get("/feed", auth.required, function (req, res, next) {
 
 router.post("/", auth.required, function (req, res, next) {
   User.findById(req.payload.id)
-    .then( function(user) {
+    .then(function(user) {
       if (!user) {
         return res.sendStatus(401);
       }
@@ -187,7 +187,7 @@ router.post("/", auth.required, function (req, res, next) {
           console.log(err);
         }
       }
-      
+
       item.seller = user;
 
       return item.save().then(function () {
