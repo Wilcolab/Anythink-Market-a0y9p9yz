@@ -155,7 +155,7 @@ router.get("/feed", auth.required, function (req, res, next) {
 
 router.post("/", auth.required, function (req, res, next) {
   User.findById(req.payload.id)
-    .then(async function (user) {
+    .then(async (user) => {
       if (!user) {
         return res.sendStatus(401);
       }
