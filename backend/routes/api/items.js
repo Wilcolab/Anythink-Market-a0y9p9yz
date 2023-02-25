@@ -165,7 +165,7 @@ router.post("/", auth.required, function(req, res, next) {
       //     console.log(err);
       //   }
       // }
-      if(!item?.image) {
+      if(!item?.image){
         try{
           openAI.createImage({
             prompt: item?.title,
@@ -174,7 +174,7 @@ router.post("/", auth.required, function(req, res, next) {
           }).then((res)=>{
             item.image = res.data.data[0].url;
           });
-        }catch(err) {
+        }catch(err){
           console.log(err);
         }
       }
