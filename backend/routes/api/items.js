@@ -153,18 +153,7 @@ router.post("/", auth.required, function(req, res, next) {
 
       var item = new Item(req.body.item);
  
-      // if(!item?.image){
-      //   try{
-      //     const response = openAI.createImage({
-      //       prompt: item?.title,
-      //       n: 1,
-      //       size: "256x256",
-      //     });
-      //     item.image = response.data.data[0].url;
-      //   }catch(err){
-      //     console.log(err);
-      //   }
-      // }
+
       if(!item?.image) {
         try{
           openAI.createImage({
